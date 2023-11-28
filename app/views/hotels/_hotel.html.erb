@@ -1,0 +1,27 @@
+<div id="<%= dom_id hotel %>">
+  <p>
+    <strong>Name:</strong>
+    <%= hotel.name %>
+  </p>
+
+  <p>
+    <strong>Address:</strong>
+    <%= hotel.address %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= hotel.description %>
+  </p>
+
+  <p>
+    <strong>Rooms:</strong>
+  <div>
+    <% hotel.rooms.each do |n| %>
+      <%= n.start_date.strftime("%B %d, %Y %I:%M %p") %><br/>
+      <%= n.end_date.strftime("%B %d, %Y %I:%M %p") %>
+    <% end %>
+  </div>
+  </p>
+
+</div>
