@@ -1,0 +1,9 @@
+<div class="room card mb-3">
+  <div class="card-body">
+    <h2 class="card-title"><%= room.room_code %></h2>
+    <p class="card-text"><%= room.description %></p>
+    <p class="card-text">Price: <%= number_to_currency(room.price) %></p>
+
+    <%= link_to "View Details", room_path(room), class: "btn btn-primary" %>
+  </div>
+</div>

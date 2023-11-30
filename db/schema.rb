@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_28_071912) do
   create_table "rooms", force: :cascade do |t|
     t.string "room_code", limit: 40, null: false
     t.text "description", limit: 200, null: false
+    t.integer "hotel_id", null: false
     t.decimal "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
