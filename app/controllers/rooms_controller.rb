@@ -28,10 +28,10 @@ class RoomsController < ApplicationController
     @room.destroy!
 
   end
-  private
 
+  private
   def room_params
-    params.require(:room).permit(:room_code, :description, :price)
+    params.require(:room).permit(:room_code, :description, :price, :hotel_id)
   end
 
 end

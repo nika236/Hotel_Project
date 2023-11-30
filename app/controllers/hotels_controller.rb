@@ -17,9 +17,9 @@ class HotelsController < ApplicationController
 
   def create
     @hotel = Hotel.new(hotel_params)
-    if @hotel.save!
+    if @hotel.save
       flash[:notice] = "Hotel Created successfully"
-      redirect_to @hotel
+      redirect_to new_room_path
     else
       render 'new', status: :unprocessable_entity
     end
@@ -40,10 +40,12 @@ class HotelsController < ApplicationController
   end
 
   private
-    def set_hotel
-      @hotel = Hotel.find(params[:id])
-    end
-    def hotel_params
-      params.require(:hotel).permit(:name, :address, :description)
-    end
+
+  def set_hotel
+    @hotel = Hotel.find(params[:id])
+  end
+
+  def hotel_params
+    params.require(:hotel).permit(:name, :address, :description)
+  end
 end

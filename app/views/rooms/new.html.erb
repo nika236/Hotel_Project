@@ -1,0 +1,8 @@
+<h1>Add Room For <%= @room.hotel %> Hotel</h1>
+<%= render 'shared/error', obj: @room %>
+<%= render "form", obj: @room %>
+<br>
+
+<div>
+  <%= link_to "Back to hotels", hotels_path %>
+</div>
