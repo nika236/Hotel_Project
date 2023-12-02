@@ -1,4 +1,5 @@
 class Room < ApplicationRecord
   belongs_to :hotel
-  validates :room_code, :description, :price, presence: true
+  has_many :bookings
+  validates :room_code, :description, :price_per_night, presence: true
 end

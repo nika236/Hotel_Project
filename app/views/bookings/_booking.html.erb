@@ -1,0 +1,9 @@
+<div class="card mb-2">
+  <div class="card-body">
+    <h5 class="card-title">Booking Details</h5>
+    <p class="card-text"><strong>Code:</strong> <%= booking.booking_code %></p>
+    <p class="card-text"><strong>Start Date:</strong> <%= booking.start_date %></p>
+    <p class="card-text"><strong>End Date:</strong> <%= booking.end_date %></p>
+    <p class="card-text"><strong>Total Price:</strong> <%= number_to_currency(booking.count_price) %></p>
+  </div>
+</div>

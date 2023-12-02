@@ -1,14 +1,16 @@
 class RoomsController < ApplicationController
 
 
-
   def new
     @room = Room.new
   end
 
-  def edit
+  def show
+    @room = Room.find(params[:id])
   end
 
+  def edit
+  end
 
   def create
     @room = Room.new(room_params)
@@ -26,12 +28,12 @@ class RoomsController < ApplicationController
 
   def destroy
     @room.destroy!
-
   end
 
   private
+
   def room_params
-    params.require(:room).permit(:room_code, :description, :price, :hotel_id)
+    params.require(:room).permit(:room_code, :description, :price_per_night, :hotel_id)
   end
 
 end
