@@ -1,10 +1,4 @@
-<div class="room card mb-3">
-  <div class="card-body">
-    <h2 class="card-title"><%= room.room_code %></h2>
-    <p class="card-text"><%= room.description %></p>
-    <p class="card-text">Price per night: <%= number_to_currency(room.price_per_night) %></p>
+<h2 class="card-title"><%= room.room_code %></h2>
+<p class="card-text"><%= room.description %></p>
+<p class="card-text">Price per night: <%= number_to_currency(room.price_per_night) %></p>
 
-    <%= link_to "Book", new_room_booking_path(room), class: "btn btn-primary" %>
-    <%= link_to "Booking list", room_path(room), class: "btn btn-secondary" %>
-  </div>
-</div>

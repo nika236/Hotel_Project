@@ -1,5 +1,13 @@
 <h1> Room's Details</h1>
-<%= render @room %>
+<div class="room card mb-3">
+  <div class="card-body">
+    <%= render @room %>
+    <%= link_to "Book", new_hotel_room_booking_path(@hotel, @room), class: "btn btn-primary" %>
+    <%= link_to 'Delete room', hotel_room_path(@room), class: "btn btn-dark", data: { turbo_method: :delete, turbo_confirm: "Are you Sure?" } %>
+    <%= link_to 'Back To Hotel', hotel_path(@hotel), class: "btn btn-secondary"  %>
+
+  </div>
+</div>
 
 <% @room.bookings.each do |book| %>
   <%= render 'bookings/booking', booking: book %>

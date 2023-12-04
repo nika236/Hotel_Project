@@ -1,6 +1,6 @@
 class Hotel < ApplicationRecord
   has_many :rooms, dependent: :destroy
-  validates :name, presence: true
+  validates :name, uniqueness: {case_sensitive: false} ,presence: true
   validates :address, presence: true
   validates :description, presence: true
   # after_initialize :must_have_at_least_one_room

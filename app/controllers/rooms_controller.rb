@@ -1,19 +1,20 @@
 class RoomsController < ApplicationController
-
-
+  before_action :set_hotel, only: [:new, :create,:edit,:update,  :destroy]
+  before_action :set_room , only: [:edit, :update, :show, :destroy]
   def new
     @room = Room.new
   end
 
   def show
-    @room = Room.find(params[:id])
+    @hotel = @room.hotel
   end
 
   def edit
+
   end
 
   def create
-    @room = Room.new(room_params)
+    @room = @hotel.rooms.build(room_params)
     if @room.save
       flash[:notice] = "Room created successfully"
       redirect_to @room.hotel
@@ -24,10 +25,17 @@ class RoomsController < ApplicationController
   end
 
   def update
+    if @room.update(room_params)
+      flash[:notice] = "Room's Detail successfully updated"
+      redirect_to @room.hotel
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   def destroy
-    @room.destroy!
+    @room.destroy
+    redirect_back  fallback_location: @room.hotel
   end
 
   private
@@ -36,4 +44,10 @@ class RoomsController < ApplicationController
     params.require(:room).permit(:room_code, :description, :price_per_night, :hotel_id)
   end
 
+  def set_hotel
+    @hotel = Hotel.find(params[:hotel_id])
+  end
+  def set_room
+    @room = Room.find(params[:id])
+  end
 end

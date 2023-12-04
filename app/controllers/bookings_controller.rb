@@ -1,8 +1,11 @@
 class BookingsController < ApplicationController
-  before_action :set_room, only: [:new, :create]
+  before_action :set_room, only: [:new, :create, :destroy]
+  before_action :set_hotel, only: [:new, :create, :destroy]
+  before_action :set_booking, except: [:new, :create]
 
   def show
-    @booking = Booking.find(params[:id])
+    @hotel = @booking.room.hotel
+    @room = @booking.room
   end
 
   def new
@@ -14,20 +17,45 @@ class BookingsController < ApplicationController
     @booking.generate_booking_code
     if @booking.save
       flash[:notice] = "Your Book Created Successfully"
-      redirect_to @booking
+      redirect_to hotel_room_booking_path(@hotel, @room, @booking)
     else
       render 'new', status: :unprocessable_entity
     end
+  end
 
+  def edit
+  end
+
+  def update
+    if @booking.update(booking_params)
+      flash[:notice] = "Booking Changed Successfully"
+      redirect_to @booking.room
+    else
+      render 'edit', status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @booking.destroy
+    redirect_to hotel_room_path(@hotel, @room)
   end
 
   private
+
   def set_room
     @room = Room.find(params[:room_id])
   end
 
+  def set_hotel
+    @hotel = Hotel.find(params[:hotel_id])
+  end
+
+  def set_booking
+    @booking = Booking.find(params[:id])
+  end
+
   def booking_params
-    params.require(:booking).permit(:start_date, :end_date,:room_id,:count_price)
+    params.require(:booking).permit(:start_date, :end_date, :room_id, :count_price)
   end
 
 end

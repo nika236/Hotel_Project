@@ -19,7 +19,7 @@ class HotelsController < ApplicationController
     @hotel = Hotel.new(hotel_params)
     if @hotel.save
       flash[:notice] = "Hotel Created successfully"
-      redirect_to new_room_path
+      redirect_to @hotel
     else
       render 'new', status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class HotelsController < ApplicationController
   end
 
   def destroy
-    @hotel.destroy!
+    @hotel.destroy
     redirect_to hotels_path
   end
 
