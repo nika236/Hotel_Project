@@ -1,6 +1,7 @@
 class RoomsController < ApplicationController
-  before_action :set_hotel, only: [:new, :create,:edit,:update,  :destroy]
+  before_action :set_hotel, only: [:new, :create,:edit,:update, :destroy]
   before_action :set_room , only: [:edit, :update, :show, :destroy]
+  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
   def new
     @room = Room.new
   end
@@ -10,7 +11,6 @@ class RoomsController < ApplicationController
   end
 
   def edit
-
   end
 
   def create
@@ -49,5 +49,11 @@ class RoomsController < ApplicationController
   end
   def set_room
     @room = Room.find(params[:id])
+  end
+
+  def require_admin
+    unless current_user && current_user.admin?
+      redirect_to hotels_path, alert: "You must be an admin to access this page."
+    end
   end
 end

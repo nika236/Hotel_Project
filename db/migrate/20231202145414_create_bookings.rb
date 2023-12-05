@@ -6,6 +6,7 @@ class CreateBookings < ActiveRecord::Migration[7.1]
       t.datetime :end_date, null:false
       t.decimal :count_price, null: false
       t.integer :room_id, null:false
+      t.integer :user_id, null:false
       t.timestamps
     end
   end

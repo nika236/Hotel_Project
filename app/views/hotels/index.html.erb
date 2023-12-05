@@ -2,10 +2,15 @@
 
 
 <% @hotels.each do |hotel| %>
+  <div id="<%= dom_id hotel %>" class="card mt-3">
+    <div class="card-body ">
   <%= render hotel %>
-  <%= link_to "Show this hotel", hotel, class: "btn btn-secondary btn-sm mt-3" %>
   <br/>
+  <%= link_to "Show this hotel", hotel, class: "btn btn-secondary btn-sm" %>
+    </div>
+  </div>
 
 <% end %>
-
+<% if current_user.admin? %>
 <%= link_to "New hotel", new_hotel_path, class: "btn btn-success mt-2" %>
+<% end %>
