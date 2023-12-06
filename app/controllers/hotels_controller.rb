@@ -1,4 +1,5 @@
 class HotelsController < ApplicationController
+  include ApplicationHelper
   before_action :set_hotel, only: [ :show, :edit, :update,:destroy ]
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
   def index
@@ -19,7 +20,7 @@ class HotelsController < ApplicationController
     @hotel = Hotel.new(hotel_params)
     if @hotel.save
       flash[:notice] = "Hotel Created successfully"
-      redirect_to @hotel
+      redirect_to new_hotel_room_path(@hotel)
     else
       render 'new', status: :unprocessable_entity
     end
@@ -49,9 +50,5 @@ class HotelsController < ApplicationController
     params.require(:hotel).permit(:name, :address, :description)
   end
 
-  def require_admin
-    unless current_user && current_user.admin?
-      redirect_to hotels_path, alert: "You must be an admin to access this page."
-    end
-  end
+
 end
