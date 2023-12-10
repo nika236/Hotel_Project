@@ -3,7 +3,7 @@ class Booking < ApplicationRecord
   belongs_to :user
   validates :start_date, presence: true
   validates :end_date, presence: true
-  before_validation :generate_booking_code, on: :create
+  before_create :generate_booking_code
   before_validation :calculate_count_price
   validate :cant_be_in_past
   validate :end_date_after_start_date
@@ -45,9 +45,10 @@ class Booking < ApplicationRecord
     return unless start_date.present? && end_date.present?
 
     overlapping_bookings = room.bookings.where(
-      "(? BETWEEN start_date AND end_date) OR (? BETWEEN start_date AND end_date) OR (start_date BETWEEN ? AND ?) OR (end_date BETWEEN ? AND ?)",
-      start_date, end_date, start_date, end_date, start_date, end_date
+      "(start_date <= ? AND end_date >= ?) OR (start_date <= ? AND end_date >= ?) OR (start_date >= ? AND end_date <= ?)",
+      end_date, start_date, start_date, end_date, start_date, end_date
     )
+
 
     if overlapping_bookings.exists?
       errors.add(:base, "Another booking exists for this room during the selected period")

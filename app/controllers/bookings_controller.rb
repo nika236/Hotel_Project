@@ -1,12 +1,10 @@
 class BookingsController < ApplicationController
-  before_action :set_room, only: [:new, :create, :destroy]
-  before_action :set_hotel, only: [:new, :create, :destroy]
-  before_action :set_booking, except: [:new, :create]
   before_action :not_require_admin, only: [:new, :create]
+  before_action :set_hotel, only: [:new, :create, :destroy, :show]
+  before_action :set_room, only: [:new, :create, :destroy, :show]
+  before_action :set_booking, except: [:new, :create]
 
   def show
-    @hotel = @booking.room.hotel
-    @room = @booking.room
   end
 
   def new
@@ -16,7 +14,6 @@ class BookingsController < ApplicationController
   def create
     @booking = @room.bookings.build(booking_params)
     @booking.user = current_user
-    @booking.generate_booking_code
     if @booking.save
       flash[:notice] = "Your Book Created Successfully"
       redirect_to hotel_room_booking_path(@hotel, @room, @booking)
@@ -34,23 +31,34 @@ class BookingsController < ApplicationController
   private
 
   def set_room
-    @room = Room.find(params[:room_id])
+    @room = Room.find_by(id: params[:room_id])
+
+    unless @room
+      flash[:alert] = "There is No Recorded hotel"
+      redirect_to root_path
+    end
   end
 
   def set_hotel
-    @hotel = Hotel.find(params[:hotel_id])
+    hotel_finder = Hotels::HotelFindByIdService.new(params[:hotel_id])
+    @hotel = hotel_finder.find_hotel
+    unless @hotel
+      flash[:alert] = "There is No Recorded hotel"
+      redirect_to root_path
+    end
   end
 
   def set_booking
-    @booking = Booking.find(params[:id])
+    @booking = Booking.find_by(id: params[:id])
+
+    unless @booking
+      flash[:alert] = "There is No Recorded hotel"
+      redirect_to root_path
+    end
   end
 
   def booking_params
     params.require(:booking).permit(:start_date, :end_date, :room_id, :count_price)
   end
-  def not_require_admin
-    if current_user && current_user.admin?
-      redirect_to hotels_path, alert: "admin can't access this page."
-    end
-  end
+
 end

@@ -7,7 +7,7 @@ class HotelsTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit hotels_url
-    assert_selector "h1", text: "Hotels"
+    assert_selector "h1", text: "hotels"
   end
 
   test "should create hotel" do

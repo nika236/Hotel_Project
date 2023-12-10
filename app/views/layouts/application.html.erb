@@ -20,7 +20,7 @@
                   class: "btn btn-secondary",
                   data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
     <%= link_to 'Edit Profile', edit_user_registration_path, class: "btn btn-warning mr-2" %>
-    <%= link_to "Delete Account", registration_path(current_user), class: "btn btn-dark", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }%>
+    <%= link_to "Delete Account", registration_path(current_user), class: "btn btn-dark", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
   </p>
 <% end %>
 
@@ -28,6 +28,9 @@
 <!--<p class="alert"><%#= alert %></p>-->
 <div style="margin: 20px">
   <%= yield %>
+  <% if current_user && !current_page?(root_path) %>
+    <%= link_to 'Home', root_path, class: "btn btn-secondary mt-2" %>
+  <% end %>
 </div>
 </body>
 </html>
