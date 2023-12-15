@@ -3,6 +3,8 @@ class BookingsController < ApplicationController
   before_action :set_hotel, only: [:new, :create, :destroy, :show]
   before_action :set_room, only: [:new, :create, :destroy, :show]
   before_action :set_booking, except: [:new, :create]
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
 
   def show
   end
@@ -31,30 +33,15 @@ class BookingsController < ApplicationController
   private
 
   def set_room
-    @room = Room.find_by(id: params[:room_id])
-
-    unless @room
-      flash[:alert] = "There is No Recorded hotel"
-      redirect_to root_path
-    end
+    @room = Room.find(params[:room_id])
   end
 
   def set_hotel
-    hotel_finder = Hotels::HotelFindByIdService.new(params[:hotel_id])
-    @hotel = hotel_finder.find_hotel
-    unless @hotel
-      flash[:alert] = "There is No Recorded hotel"
-      redirect_to root_path
-    end
+   @hotel = Hotel.find(params[:hotel_id])
   end
 
   def set_booking
-    @booking = Booking.find_by(id: params[:id])
-
-    unless @booking
-      flash[:alert] = "There is No Recorded hotel"
-      redirect_to root_path
-    end
+    @booking = Booking.find(params[:id])
   end
 
   def booking_params

@@ -1,16 +1,17 @@
 module Rooms
 
   class RoomCreationService
-    def initialize(hotel_id, params)
-      @hotel_id = hotel_id
+    attr_reader :room
+    def initialize(hotel, params)
+      @hotel = hotel
       @params = params
     end
 
 
     def create_room
-      room = @hotel_id.rooms.build(@params)
-      if room.save
-        room
+      @room = @hotel.rooms.build(@params)
+      if @room.save
+        @room
       else
         false
       end

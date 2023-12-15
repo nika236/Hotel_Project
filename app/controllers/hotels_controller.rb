@@ -1,6 +1,8 @@
 class HotelsController < ApplicationController
-  before_action :set_hotel, only: [ :show, :edit, :update,:destroy ]
+  before_action :set_hotel, only: [:show, :edit, :update, :destroy]
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
   def index
     @hotels = Hotel.all
   end
@@ -17,16 +19,20 @@ class HotelsController < ApplicationController
 
   def create
     hotel_create = Hotels::HotelCreationService.new(hotel_params)
-    if (hotel = hotel_create.create_hotel)
-      flash[:notice] = "Hotel Created Successfully"
-      redirect_to new_hotel_room_path(hotel.id)
-    else
+    begin
+      if (hotel = hotel_create.create_hotel)
+        flash[:notice] = "Hotel Created Successfully"
+        redirect_to new_hotel_room_path(hotel.id)
+      end
+    rescue Hotels::HotelCreationError
+      @hotel = hotel_create.hotel
+      @hotel.valid?
       render 'new', status: :unprocessable_entity
     end
   end
 
   def update
-    hotel_update = Hotels::HotelUpdateService.new(@hotel,hotel_params)
+    hotel_update = Hotels::HotelUpdateService.new(@hotel, hotel_params)
     if hotel_update.update_hotel
       flash[:notice] = "Hotel's data updated successfully"
       redirect_to @hotel
@@ -50,17 +56,11 @@ class HotelsController < ApplicationController
   private
 
   def set_hotel
-    hotel_finder = Hotels::HotelFindByIdService.new(params[:id])
-    @hotel = hotel_finder.find_hotel
-    unless @hotel
-      flash[:alert] = "There is No Recorded hotel"
-      redirect_to root_path
-    end
+    @hotel = Hotel.find(params[:id])
   end
 
   def hotel_params
     params.require(:hotel).permit(:name, :address, :description)
   end
-
 
 end
